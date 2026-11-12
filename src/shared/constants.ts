@@ -20,7 +20,7 @@ export const AUDIO = {
 /** Pay-What-You-Want config. Swap CHECKOUT_URL for your real payment link. */
 export const PWYW = {
   MILESTONE_ADS: 10,
-  CHECKOUT_URL: 'https://buy.stripe.com/your-payment-link',
+  CHECKOUT_URL: 'https://buymeacoffee.com/danglingdicestudios',
   DEFAULT_SUPPORTER_ACCENT: '#f472b6',
 } as const;
 

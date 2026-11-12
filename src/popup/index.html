@@ -7,12 +7,137 @@
     <link rel="stylesheet" href="./popup.css" />
   </head>
   <body>
-    <main class="popup">
-      <h1>AdMute</h1>
-      <p class="muted">Scaffold OK. Full UI arrives in Step 7.</p>
-      <pre id="debug">Loading…</pre>
-    </main>
+    <div class="popup-container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-brand">
+          <div class="logo-mark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </div>
+          <div class="brand-info">
+            <div class="brand-title-row">
+              <h1 class="brand-name">AdMute</h1>
+              <span id="supporter-badge" class="badge-supporter hidden">Supporter ❤️</span>
+            </div>
+            <span id="status-pill" class="status-pill status-monitoring">Monitoring</span>
+          </div>
+        </div>
+
+        <label class="switch" title="Enable/Disable on this domain">
+          <input type="checkbox" id="domain-toggle" checked />
+          <span class="slider round"></span>
+        </label>
+      </header>
+
+      <div class="domain-caption" id="domain-caption">Active on this site</div>
+
+      <!-- Value Proof Banner -->
+      <section class="value-banner">
+        <div class="value-metric">
+          <span class="value-number" id="stats-ads">0</span>
+          <span class="value-label">Ads Muted</span>
+        </div>
+        <div class="value-divider"></div>
+        <div class="value-metric">
+          <span class="value-number" id="stats-time">0m</span>
+          <span class="value-label">Peace Saved</span>
+        </div>
+      </section>
+
+      <!-- Settings Controls -->
+      <section class="controls-section">
+        <!-- Ad Volume Slider -->
+        <div class="control-group">
+          <div class="control-header">
+            <label for="ad-volume-slider">Ad Audio Level</label>
+            <span id="ad-volume-label" class="setting-value">0% (Muted)</span>
+          </div>
+          <input type="range" id="ad-volume-slider" min="0" max="0.20" step="0.01" value="0" />
+          <div class="slider-ticks">
+            <span>0% (Full Mute)</span>
+            <span>20% (Low Duck)</span>
+          </div>
+        </div>
+
+        <!-- Ambient Soundscapes -->
+        <div class="control-group">
+          <div class="control-header">
+            <label for="ambient-select">Ad Soundscape</label>
+          </div>
+          <select id="ambient-select" class="styled-select">
+            <option value="none">None (Silent)</option>
+            <option value="rain">Gentle Rain 🌧️</option>
+            <option value="stream">Running Stream 💧</option>
+            <option value="forest">Forest Breeze 🌲</option>
+          </select>
+        </div>
+
+        <!-- Feature Toggles -->
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <span class="toggle-title">Dark Screen Dimmer</span>
+            <span class="toggle-desc">Dim & blur video during commercial breaks</span>
+          </div>
+          <label class="switch small">
+            <input type="checkbox" id="dimmer-toggle" checked />
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <span class="toggle-title">Smooth Audio Fades</span>
+            <span class="toggle-desc">Exponential volume ramps to prevent jarring pops</span>
+          </div>
+          <label class="switch small">
+            <input type="checkbox" id="fade-toggle" checked />
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Pay What You Want Card -->
+      <section id="pwyw-card" class="pwyw-card">
+        <div class="pwyw-header">
+          <span class="pwyw-title">Enjoying commercial peace?</span>
+        </div>
+        <p class="pwyw-desc">
+          Saved you from <span id="pwyw-ads-count">10+</span> ads! Support independent development with Buy Me a Coffee — pay what you want ($0+).
+        </p>
+        <div class="pwyw-actions">
+          <a id="pwyw-link" href="https://buymeacoffee.com/danglingdicestudios" target="_blank" rel="noopener noreferrer" class="btn-tip">
+            ☕ Buy Me a Coffee
+          </a>
+          <button id="btn-toggle-supporter" class="btn-supporter-check">
+            I already supported ❤️
+          </button>
+        </div>
+
+        <!-- Supporter Theme Unlock Tray -->
+        <div id="supporter-perks" class="supporter-perks hidden">
+          <span class="perk-label">Unlocked Supporter Accent:</span>
+          <div class="color-palette">
+            <button class="color-dot active" data-color="#f472b6" style="background:#f472b6;"></button>
+            <button class="color-dot" data-color="#38bdf8" style="background:#38bdf8;"></button>
+            <button class="color-dot" data-color="#34d399" style="background:#34d399;"></button>
+            <button class="color-dot" data-color="#a78bfa" style="background:#a78bfa;"></button>
+            <button class="color-dot" data-color="#fbbf24" style="background:#fbbf24;"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <span>Shortcut: <kbd>Alt+Shift+M</kbd></span>
+        <span class="footer-dot">•</span>
+        <span>Debug: <kbd>Alt+Shift+D</kbd></span>
+      </footer>
+    </div>
+
     <script type="module" src="./popup.ts"></script>
   </body>
 </html>
-
