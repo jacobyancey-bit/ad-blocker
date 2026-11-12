@@ -46,6 +46,8 @@ export const SUPPORTED_MATCHES = [
 export const DEFAULT_SETTINGS: Settings = {
   adVolume: 0,
   fadeEnabled: true,
+  dimOverlayEnabled: true,
+  ambientSound: 'none',
   disabledDomains: [],
   customSites: [],
 };

@@ -1,12 +1,18 @@
 /** Detection state of a single tab, as surfaced to the popup and badge. */
 export type TabStatus = 'MONITORING' | 'AD_MUTED' | 'PAUSED' | 'DISABLED' | 'UNSUPPORTED';
 
+export type AmbientSound = 'none' | 'rain' | 'stream' | 'forest';
+
 /** User preferences — synced across the user's Chrome profile. */
 export interface Settings {
   /** Volume to duck to during ads, 0.0 (full mute) – 0.2 (20%). */
   adVolume: number;
   /** Smooth fade transitions on/off. */
   fadeEnabled: boolean;
+  /** Dim the video with a dark transparent overlay during ads. */
+  dimOverlayEnabled: boolean;
+  /** Ambient sound to play during muted ad breaks. */
+  ambientSound: AmbientSound;
   /** Hostnames where the user has turned AdMute off. */
   disabledDomains: string[];
   /** Extra hostnames the user granted permission for. */

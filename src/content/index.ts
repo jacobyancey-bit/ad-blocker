@@ -1,7 +1,9 @@
+import { AmbientPlayer } from './ambientPlayer';
 import { AudioController } from './audioController';
 import { DebugOverlay, downloadSnapshot } from './debugOverlay';
 import { createDetector } from './detectors/registry';
 import { AdStateMachine, type Transition } from './stateMachine';
+import { VideoDimmer } from './videoDimmer';
 import { DETECTION } from '../shared/constants';
 import type { ContentToBackground, StatusResponse, ToContent } from '../shared/messages';
 import { getSettings, isDomainEnabled } from '../shared/storage';
@@ -15,6 +17,8 @@ import type { Settings, TabStatus } from '../shared/types';
 const hostname = location.hostname;
 const detector = createDetector(hostname);
 const stateMachine = new AdStateMachine();
+const dimmer = new VideoDimmer();
+const ambientPlayer = new AmbientPlayer();
 const overlay = new DebugOverlay((type) => {
   const result = detector.detect(document);
   downloadSnapshot(result.player, detector.id, type);
@@ -30,6 +34,7 @@ let observer: MutationObserver | null = null;
 
 async function init(): Promise<void> {
   settings = await getSettings();
+  ambientPlayer.setSound(settings.ambientSound);
   if (!isDomainEnabled(settings, hostname)) {
     setStatus('DISABLED');
     return;
@@ -49,7 +54,13 @@ function setStatus(next: TabStatus): void {
   }
 }
 
-function syncAudioController(video: HTMLVideoElement | null): void {
+function syncAudioController(video: HTMLVideoElement | null, player: Element | null): void {
+  if (player) {
+    dimmer.attach(player);
+  } else if (video?.parentElement) {
+    dimmer.attach(video.parentElement);
+  }
+
   if (video === currentVideo && audioController) return;
   if (audioController) {
     audioController.dispose();
@@ -66,6 +77,8 @@ function syncAudioController(video: HTMLVideoElement | null): void {
   // If the state machine was already in MUTED when the video mounted, duck immediately
   if (stateMachine.state === 'MUTED' && !isPaused && currentStatus !== 'DISABLED') {
     audioController.duck();
+    if (settings.dimOverlayEnabled) dimmer.dim();
+    ambientPlayer.play();
   }
 }
 
@@ -76,9 +89,15 @@ stateMachine.onTransition((transition: Transition) => {
   if (transition.to === 'MUTED') {
     setStatus('AD_MUTED');
     audioController?.duck();
+    if (settings?.dimOverlayEnabled) {
+      dimmer.dim();
+    }
+    ambientPlayer.play();
   } else if (transition.to === 'NORMAL') {
     setStatus('MONITORING');
     audioController?.restore();
+    dimmer.undim();
+    ambientPlayer.stop();
 
     if (transition.adDurationMs && transition.adDurationMs > 0) {
       const msg: ContentToBackground = {
@@ -99,7 +118,7 @@ function tick(): void {
 
   const now = performance.now();
   const result = detector.detect(document);
-  syncAudioController(result.video);
+  syncAudioController(result.video, result.player);
 
   stateMachine.update(result.confidence, now);
 
@@ -152,6 +171,8 @@ function stopDetection(): void {
   }
   stateMachine.reset(performance.now());
   audioController?.restore();
+  dimmer.undim();
+  ambientPlayer.stop();
 }
 
 // Listen for messages from popup or background service worker
@@ -167,6 +188,8 @@ chrome.runtime.onMessage.addListener((msg: ToContent, _sender, sendResponse) => 
     if (isPaused) {
       setStatus('PAUSED');
       audioController?.restore();
+      dimmer.undim();
+      ambientPlayer.stop();
       stateMachine.reset(performance.now());
     } else {
       setStatus('MONITORING');
@@ -198,6 +221,12 @@ chrome.storage.onChanged.addListener((changes, area) => {
   if (audioController) {
     audioController.setAdVolume(next.adVolume);
     audioController.setFadeEnabled(next.fadeEnabled);
+  }
+  ambientPlayer.setSound(next.ambientSound);
+  if (!next.dimOverlayEnabled) {
+    dimmer.undim();
+  } else if (stateMachine.state === 'MUTED') {
+    dimmer.dim();
   }
 });
 
