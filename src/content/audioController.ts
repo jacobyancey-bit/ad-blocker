@@ -67,6 +67,7 @@ export class AudioController {
   private expectedMuted = false;
   private ramp: Ramp | null = null;
   private timer: unknown = null;
+  private safetyMuteTimer: unknown = null;
   private disposed = false;
 
   constructor(
@@ -243,7 +244,9 @@ export class AudioController {
 
   private cancelRamp(): void {
     if (this.timer !== null) this.opts.clearTimer(this.timer);
+    if (this.safetyMuteTimer !== null) this.opts.clearTimer(this.safetyMuteTimer);
     this.timer = null;
+    this.safetyMuteTimer = null;
     this.ramp = null;
   }
 

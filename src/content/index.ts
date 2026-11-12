@@ -122,6 +122,11 @@ function tick(): void {
 
   stateMachine.update(result.confidence, now);
 
+  // If in MUTED state and adVolume is 0, ensure video is muted
+  if (stateMachine.state === 'MUTED' && settings?.adVolume === 0 && currentVideo && currentVideo.volume > 0.01) {
+    currentVideo.volume = 0;
+  }
+
   overlay.update({
     detectorId: detector.id,
     confidence: result.confidence,
