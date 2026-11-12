@@ -6,7 +6,7 @@ import { AdStateMachine, type Transition } from './stateMachine';
 import { VideoDimmer } from './videoDimmer';
 import { DETECTION } from '../shared/constants';
 import type { ContentToBackground, StatusResponse, ToContent } from '../shared/messages';
-import { getSettings, isDomainEnabled } from '../shared/storage';
+import { getSettings, isDomainEnabled, updateSettings } from '../shared/storage';
 import type { Settings, TabStatus } from '../shared/types';
 
 /**
@@ -35,6 +35,12 @@ let observer: MutationObserver | null = null;
 async function init(): Promise<void> {
   settings = await getSettings();
   ambientPlayer.setSound(settings.ambientSound);
+  dimmer.setSoundCallback(async (sound) => {
+    const s = sound as any;
+    ambientPlayer.setSound(s);
+    ambientPlayer.play();
+    await updateSettings({ ambientSound: s });
+  });
   if (!isDomainEnabled(settings, hostname)) {
     setStatus('DISABLED');
     return;
@@ -90,7 +96,7 @@ stateMachine.onTransition((transition: Transition) => {
     setStatus('AD_MUTED');
     audioController?.duck();
     if (settings?.dimOverlayEnabled) {
-      dimmer.dim();
+      dimmer.dim(settings.ambientSound);
     }
     ambientPlayer.play();
   } else if (transition.to === 'NORMAL') {
@@ -122,10 +128,7 @@ function tick(): void {
 
   stateMachine.update(result.confidence, now);
 
-  // If in MUTED state and adVolume is 0, ensure video is muted
-  if (stateMachine.state === 'MUTED' && settings?.adVolume === 0 && currentVideo && currentVideo.volume > 0.01) {
-    currentVideo.volume = 0;
-  }
+
 
   overlay.update({
     detectorId: detector.id,

@@ -109,7 +109,8 @@ export class AudioController {
     if (this.disposed) return;
     switch (this._phase) {
       case 'idle':
-        this.savedVolume = this.media.volume;
+        // Remember whatever positive volume the user had; default to 0.8 if starting at 0
+        this.savedVolume = this.media.volume > 0 ? this.media.volume : (this.savedVolume || 0.8);
         this.expectedMuted = this.media.muted;
         this.expectedVolume = this.media.volume;
         this._phase = 'fading-out';
@@ -132,10 +133,19 @@ export class AudioController {
       case 'fading-out':
       case 'ducked':
         this._phase = 'fading-in';
-        this.startRamp(this.savedVolume, this.opts.fadeInMs);
+        if (this.media.muted) {
+          this.media.muted = false;
+        }
+        this.startRamp(Math.max(this.savedVolume, 0.5), this.opts.fadeInMs);
         return;
       case 'overridden':
         this._phase = 'idle';
+        if (this.media.muted && !this.expectedMuted) {
+          this.media.muted = false;
+        }
+        if (this.media.volume < 0.05) {
+          this.write(Math.max(this.savedVolume, 0.5));
+        }
         this.expectedVolume = null;
         return;
       default:
