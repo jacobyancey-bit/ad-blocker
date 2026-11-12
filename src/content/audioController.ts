@@ -132,23 +132,26 @@ export class AudioController {
     switch (this._phase) {
       case 'fading-out':
       case 'ducked':
-        this._phase = 'fading-in';
-        if (this.media.muted) {
-          this.media.muted = false;
-        }
-        this.startRamp(Math.max(this.savedVolume, 0.5), this.opts.fadeInMs);
-        return;
       case 'overridden':
-        this._phase = 'idle';
-        if (this.media.muted && !this.expectedMuted) {
-          this.media.muted = false;
-        }
-        if (this.media.volume < 0.05) {
-          this.write(Math.max(this.savedVolume, 0.5));
-        }
+        this._phase = 'fading-in';
         this.expectedVolume = null;
+        this.media.muted = false;
+        // Unconditionally restore volume back up to at least 0.7
+        const target = Math.max(this.savedVolume, 0.7);
+        this.startRamp(target, this.opts.fadeInMs);
+        // Direct write backup in case player's own internal script resets it
+        setTimeout(() => {
+          if (this._phase === 'idle' || this._phase === 'fading-in') {
+            this.media.muted = false;
+            if (this.media.volume < 0.2) {
+              this.write(target);
+            }
+          }
+        }, this.opts.fadeInMs + 50);
         return;
       default:
+        // Even if idle, ensure not left muted
+        if (this.media.muted) this.media.muted = false;
         return;
     }
   }

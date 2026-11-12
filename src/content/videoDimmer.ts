@@ -23,15 +23,18 @@ export class VideoDimmer {
     div.className = 'admute-video-dimmer';
     div.style.cssText = `
       position: absolute;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: rgba(0, 0, 0, 0.88);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      z-index: 100;
+      z-index: 2147483640;
       pointer-events: auto;
       opacity: 0;
+      display: none;
       transition: opacity 300ms ease;
-      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -108,6 +111,9 @@ export class VideoDimmer {
     this.isDimmed = true;
     if (this.overlay) {
       this.highlightActiveButton(this.overlay, currentSound);
+      this.overlay.style.display = 'flex';
+      // Force reflow for opacity transition
+      void this.overlay.offsetHeight;
       this.overlay.style.opacity = '1';
       this.overlay.style.pointerEvents = 'auto';
     }
@@ -118,6 +124,11 @@ export class VideoDimmer {
     if (this.overlay) {
       this.overlay.style.opacity = '0';
       this.overlay.style.pointerEvents = 'none';
+      setTimeout(() => {
+        if (!this.isDimmed && this.overlay) {
+          this.overlay.style.display = 'none';
+        }
+      }, 300);
     }
   }
 
