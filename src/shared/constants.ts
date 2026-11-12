@@ -37,6 +37,10 @@ export const SUPPORTED_MATCHES = [
   'https://www.paramountplus.com/*',
   'https://play.max.com/*',
   'https://play.hbomax.com/*',
+  'https://tubitv.com/*',
+  'https://pluto.tv/*',
+  'https://therokuchannel.roku.com/*',
+  'https://www.crunchyroll.com/*',
 ] as const;
 
 export const DEFAULT_SETTINGS: Settings = {

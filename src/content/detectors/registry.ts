@@ -1,7 +1,14 @@
 import type { BaseDetector } from './BaseDetector';
+import { CRUNCHYROLL_HOSTS, CrunchyrollDetector } from './crunchyroll';
 import { GenericDetector } from './generic';
 import { HULU_HOSTS, HuluDetector } from './hulutv';
+import { MAX_HOSTS, MaxDetector } from './max';
+import { PARAMOUNT_HOSTS, ParamountDetector } from './paramountplus';
 import { PEACOCK_HOSTS, PeacockDetector } from './peacock';
+import { PLUTO_HOSTS, PlutoDetector } from './pluto';
+import { PRIME_HOSTS, PrimeVideoDetector } from './primevideo';
+import { ROKU_HOSTS, RokuDetector } from './roku';
+import { TUBI_HOSTS, TubiDetector } from './tubitv';
 import { TWITCH_HOSTS, TwitchDetector } from './twitch';
 import { YOUTUBE_HOSTS, YouTubeDetector } from './youtube';
 
@@ -21,6 +28,13 @@ const ADAPTERS: readonly AdapterEntry[] = [
   { hosts: HULU_HOSTS, create: () => new HuluDetector() },
   { hosts: PEACOCK_HOSTS, create: () => new PeacockDetector() },
   { hosts: TWITCH_HOSTS, create: () => new TwitchDetector() },
+  { hosts: PRIME_HOSTS, create: () => new PrimeVideoDetector() },
+  { hosts: PARAMOUNT_HOSTS, create: () => new ParamountDetector() },
+  { hosts: MAX_HOSTS, create: () => new MaxDetector() },
+  { hosts: TUBI_HOSTS, create: () => new TubiDetector() },
+  { hosts: PLUTO_HOSTS, create: () => new PlutoDetector() },
+  { hosts: CRUNCHYROLL_HOSTS, create: () => new CrunchyrollDetector() },
+  { hosts: ROKU_HOSTS, create: () => new RokuDetector() },
 ];
 
 export function createDetector(hostname: string): BaseDetector {

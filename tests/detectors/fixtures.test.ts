@@ -23,6 +23,13 @@ const SITES: Record<string, SiteConfig> = {
   hulu: { hostname: 'www.hulu.com', detectorId: 'hulu' },
   peacock: { hostname: 'www.peacocktv.com', detectorId: 'peacock' },
   twitch: { hostname: 'www.twitch.tv', detectorId: 'twitch' },
+  primevideo: { hostname: 'www.primevideo.com', detectorId: 'primevideo' },
+  paramountplus: { hostname: 'www.paramountplus.com', detectorId: 'paramountplus' },
+  max: { hostname: 'play.max.com', detectorId: 'max' },
+  tubitv: { hostname: 'tubitv.com', detectorId: 'tubitv' },
+  pluto: { hostname: 'pluto.tv', detectorId: 'pluto' },
+  crunchyroll: { hostname: 'www.crunchyroll.com', detectorId: 'crunchyroll' },
+  roku: { hostname: 'therokuchannel.roku.com', detectorId: 'roku' },
 };
 
 const files = import.meta.glob<string>('./fixtures/*/*.html', {
