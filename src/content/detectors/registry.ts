@@ -1,5 +1,8 @@
 import type { BaseDetector } from './BaseDetector';
 import { GenericDetector } from './generic';
+import { HULU_HOSTS, HuluDetector } from './hulutv';
+import { PEACOCK_HOSTS, PeacockDetector } from './peacock';
+import { TWITCH_HOSTS, TwitchDetector } from './twitch';
 import { YOUTUBE_HOSTS, YouTubeDetector } from './youtube';
 
 /**
@@ -15,6 +18,9 @@ interface AdapterEntry {
 
 const ADAPTERS: readonly AdapterEntry[] = [
   { hosts: YOUTUBE_HOSTS, create: () => new YouTubeDetector() },
+  { hosts: HULU_HOSTS, create: () => new HuluDetector() },
+  { hosts: PEACOCK_HOSTS, create: () => new PeacockDetector() },
+  { hosts: TWITCH_HOSTS, create: () => new TwitchDetector() },
 ];
 
 export function createDetector(hostname: string): BaseDetector {
