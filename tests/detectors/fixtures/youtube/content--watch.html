@@ -1,0 +1,33 @@
+<!-- YouTube watch page playing content. Empty ad module, hidden leftover ad overlay, sponsored card in the sidebar. -->
+<ytd-app>
+  <div id="player-container">
+    <div id="movie_player" class="html5-video-player ytp-transparent playing-mode ytp-autohide">
+      <div class="html5-video-container">
+        <video class="video-stream html5-main-video" tabindex="-1"></video>
+      </div>
+      <div class="video-ads ytp-ad-module"></div>
+      <div class="ytp-ad-player-overlay-layout" style="display:none">
+        <span class="ytp-ad-badge">Sponsored</span>
+        <div class="ytp-ad-text">Ad 1 of 2</div>
+      </div>
+      <div class="ytp-chrome-top">
+        <a class="ytp-title-link">How bridges are built | Engineering explained</a>
+      </div>
+      <div class="ytp-popup ytp-settings-menu" style="display:none">
+        <div class="ytp-menuitem-label">Annotations</div>
+        <div class="ytp-menuitem-label">Playback speed</div>
+        <div class="ytp-menuitem-label">Ad</div>
+      </div>
+      <div class="ytp-chrome-bottom">
+        <button class="ytp-play-button" aria-label="Pause (k)"></button>
+        <span class="ytp-time-current">12:41</span> / <span class="ytp-time-duration">48:03</span>
+      </div>
+    </div>
+  </div>
+  <div id="secondary">
+    <ytd-ad-slot-renderer>
+      <div class="badge">Sponsored</div>
+      <div>Ad 1 of 2</div>
+    </ytd-ad-slot-renderer>
+  </div>
+</ytd-app>

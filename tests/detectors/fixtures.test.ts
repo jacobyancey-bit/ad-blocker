@@ -19,6 +19,7 @@ interface SiteConfig {
 
 const SITES: Record<string, SiteConfig> = {
   generic: { hostname: 'example.com', detectorId: 'generic' },
+  youtube: { hostname: 'www.youtube.com', detectorId: 'youtube' },
 };
 
 const files = import.meta.glob<string>('./fixtures/*/*.html', {

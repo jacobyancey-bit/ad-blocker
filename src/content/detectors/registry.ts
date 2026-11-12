@@ -1,5 +1,6 @@
 import type { BaseDetector } from './BaseDetector';
 import { GenericDetector } from './generic';
+import { YOUTUBE_HOSTS, YouTubeDetector } from './youtube';
 
 /**
  * Maps hostnames to site adapters. To add a service:
@@ -12,7 +13,9 @@ interface AdapterEntry {
   create: () => BaseDetector;
 }
 
-const ADAPTERS: readonly AdapterEntry[] = [];
+const ADAPTERS: readonly AdapterEntry[] = [
+  { hosts: YOUTUBE_HOSTS, create: () => new YouTubeDetector() },
+];
 
 export function createDetector(hostname: string): BaseDetector {
   const host = hostname.toLowerCase();
