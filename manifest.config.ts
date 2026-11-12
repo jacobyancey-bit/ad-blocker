@@ -23,7 +23,7 @@ export default defineManifest({
   content_scripts: [
     {
       matches: [...SUPPORTED_MATCHES],
-      js: ['src/content/index.ts'],
+      js: ['src/content/index.iife.ts'],
       run_at: 'document_idle',
       all_frames: false,
     },
