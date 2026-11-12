@@ -34,6 +34,13 @@ export default defineManifest({
     default_popup: 'src/popup/index.html',
   },
 
+  web_accessible_resources: [
+    {
+      resources: ['sounds/*.mp3'],
+      matches: ['<all_urls>'],
+    },
+  ],
+
   commands: {
     'toggle-detection': {
       suggested_key: { default: 'Alt+Shift+M' },
