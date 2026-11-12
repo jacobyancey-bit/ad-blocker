@@ -267,19 +267,48 @@ input[type="range"] {
   color: var(--fg-muted);
 }
 
-.styled-select {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  color: var(--fg-primary);
-  border-radius: 6px;
-  padding: 6px 10px;
-  font-size: 12px;
-  cursor: pointer;
-  outline: none;
+.sound-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
 }
 
-.styled-select:focus {
+.btn-sound {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--fg-secondary);
+  border-radius: 8px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.btn-sound:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-focus);
+  color: var(--fg-primary);
+}
+
+.btn-sound.active {
+  background: rgba(var(--accent-rgb), 0.15);
   border-color: var(--accent);
+  color: var(--fg-primary);
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.2);
+}
+
+.sound-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.sound-title {
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .toggle-row {

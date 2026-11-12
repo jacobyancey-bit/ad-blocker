@@ -63,17 +63,30 @@
           </div>
         </div>
 
-        <!-- Ambient Soundscapes -->
+        <!-- Ambient Soundscapes as Interactive Buttons -->
         <div class="control-group">
           <div class="control-header">
-            <label for="ambient-select">Ad Soundscape</label>
+            <label>Ad Soundscape</label>
+            <span id="ambient-current-label" class="setting-value">Silent</span>
           </div>
-          <select id="ambient-select" class="styled-select">
-            <option value="none">None (Silent)</option>
-            <option value="rain">Gentle Rain 🌧️</option>
-            <option value="stream">Running Stream 💧</option>
-            <option value="forest">Forest Breeze 🌲</option>
-          </select>
+          <div class="sound-grid">
+            <button type="button" class="btn-sound active" data-sound="none">
+              <span class="sound-icon">🔇</span>
+              <span class="sound-title">Silent</span>
+            </button>
+            <button type="button" class="btn-sound" data-sound="rain">
+              <span class="sound-icon">🌧️</span>
+              <span class="sound-title">Rain</span>
+            </button>
+            <button type="button" class="btn-sound" data-sound="stream">
+              <span class="sound-icon">💧</span>
+              <span class="sound-title">Stream</span>
+            </button>
+            <button type="button" class="btn-sound" data-sound="forest">
+              <span class="sound-icon">🌲</span>
+              <span class="sound-title">Forest</span>
+            </button>
+          </div>
         </div>
 
         <!-- Feature Toggles -->

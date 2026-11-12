@@ -23,7 +23,8 @@ const statsAds = document.getElementById('stats-ads')!;
 const statsTime = document.getElementById('stats-time')!;
 const adVolumeSlider = document.getElementById('ad-volume-slider') as HTMLInputElement;
 const adVolumeLabel = document.getElementById('ad-volume-label')!;
-const ambientSelect = document.getElementById('ambient-select') as HTMLSelectElement;
+const ambientCurrentLabel = document.getElementById('ambient-current-label')!;
+const soundButtons = document.querySelectorAll<HTMLButtonElement>('.btn-sound');
 const dimmerToggle = document.getElementById('dimmer-toggle') as HTMLInputElement;
 const fadeToggle = document.getElementById('fade-toggle') as HTMLInputElement;
 const supporterBadge = document.getElementById('supporter-badge')!;
@@ -81,6 +82,19 @@ function formatVolumeLabel(vol: number): string {
   return `${Math.round(vol * 100)}% (Ducked)`;
 }
 
+function updateSoundSelection(sound: AmbientSound): void {
+  soundButtons.forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.sound === sound);
+  });
+  const labels: Record<AmbientSound, string> = {
+    none: 'Silent',
+    rain: 'Gentle Rain',
+    stream: 'Running Stream',
+    forest: 'Forest Breeze',
+  };
+  ambientCurrentLabel.textContent = labels[sound] || 'Silent';
+}
+
 function updateSupporterUI(supporter: SupporterState): void {
   if (supporter.isSupporter) {
     supporterBadge.classList.remove('hidden');
@@ -117,7 +131,7 @@ async function init(): Promise<void> {
   // Bind settings inputs
   adVolumeSlider.value = settings.adVolume.toString();
   adVolumeLabel.textContent = formatVolumeLabel(settings.adVolume);
-  ambientSelect.value = settings.ambientSound;
+  updateSoundSelection(settings.ambientSound);
   dimmerToggle.checked = settings.dimOverlayEnabled;
   fadeToggle.checked = settings.fadeEnabled;
 
@@ -182,9 +196,12 @@ async function init(): Promise<void> {
     currentSettings = await updateSettings({ adVolume: val });
   });
 
-  ambientSelect.addEventListener('change', async () => {
-    const sound = ambientSelect.value as AmbientSound;
-    currentSettings = await updateSettings({ ambientSound: sound });
+  soundButtons.forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const sound = (btn.dataset.sound || 'none') as AmbientSound;
+      updateSoundSelection(sound);
+      currentSettings = await updateSettings({ ambientSound: sound });
+    });
   });
 
   dimmerToggle.addEventListener('change', async () => {
